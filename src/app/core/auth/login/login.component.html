@@ -1,0 +1,67 @@
+<div style="text-align: center; margin: auto;">
+
+    <main class="flex-shrink-0">
+        <div class="container">
+<!--
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="errorMessage">
+                {{errorMessage}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+-->
+
+            <mat-card>
+
+                <mat-card-header>
+                    <mat-card-title style="color:darkgray;">Login</mat-card-title>
+                </mat-card-header>
+
+                <mat-card-content style='display: flex; align-items: center; flex-direction: row; padding: 20px;'>
+
+                    <div class='card-body'>
+
+                        <form (ngSubmit)="login()" [formGroup]="userForm" class="row g-3">
+
+                            <p>
+                                <mat-form-field appearance="outline" color="primary" floatLabel="always">
+                                    <mat-label>Username</mat-label>
+                                    <input matInput name="username" type="text" formControlName="username"
+                                        placeholder="Inserire Username">
+                                    <mat-error *ngIf="userForm.get('username')?.hasError('required')">Username
+                                        obbligatorio</mat-error>
+                                    <mat-error *ngIf="userForm.get('username')?.hasError('minlength')">Il campo
+                                        Username deve avere almeno 3 caratteri</mat-error>
+                                </mat-form-field>
+                            </p>
+
+                            <p>
+                                <mat-form-field appearance="outline" color="primary" floatLabel="always">
+                                    <mat-label>Password</mat-label>
+                                    <input matInput name="password" type="password" formControlName="password"
+                                        placeholder="Inserire la password">
+                                    <mat-error *ngIf="userForm.get('password')?.hasError('required')">Password
+                                        obbligatoria</mat-error>
+                                    <mat-error *ngIf="userForm.get('password')?.hasError('minlength')">Il campo
+                                        Password deve avere almeno 3 caratteri</mat-error>
+                                </mat-form-field>
+                            </p>
+
+                            <div class="col-12">
+                                <button type="submit" name="submit" value="submit" id="submit" color="primary"
+                                    [disabled]="userForm.invalid" mat-icon-button><mat-icon>done</mat-icon></button>
+                            </div>
+
+                        </form>
+
+
+                        <!-- end card-body -->
+                    </div>
+                    <!-- end card -->
+                </mat-card-content>
+            </mat-card>
+            <!-- end container -->
+        </div>
+
+        <!-- end main -->
+    </main>
+
+</div>
