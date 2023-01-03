@@ -49,15 +49,15 @@ export class ListPizzaComponent {
   }
 
   showDetail(id: number) {
-    this.router.navigate(["pizza/", id], {queryParams: {operation:"readOnly"}});
+    this.router.navigate(["pizza/detail/", id]);
   }
 
   addNew() {
-    this.router.navigate(["pizza/create"], {queryParams: {operation:"add"}});
+    this.router.navigate(["pizza/create"]);
   }
 
   update(id: number) {
-    this.router.navigate(["pizza/edit/", id], {queryParams: {operation:"edit"}});
+    this.router.navigate(["pizza/edit/", id]);
   }
 
   search() {
