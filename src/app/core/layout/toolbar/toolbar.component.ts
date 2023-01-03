@@ -15,4 +15,8 @@ export class ToolbarComponent {
     this.authService.logout();
     this.router.navigateByUrl('login');
   }
+
+  home() {
+    this.router.navigateByUrl('welcome');
+  }
 }
