@@ -12,6 +12,11 @@ const routes: Routes = [
     path: 'login',
     loadChildren: () => import('./core/auth/login/login.module').then(m => m.LoginModule)
   },
+  {
+    path: 'cliente',
+    loadChildren: () => import('./features/cliente/cliente.module').then(m => m.ClienteModule),
+    canActivate: [AuthGuard]
+  },
   { path: '', redirectTo: '/welcome', pathMatch: 'full' },
   { path: '**', redirectTo: '/welcome', pathMatch: 'full' }
 ];
