@@ -16,7 +16,8 @@ import { IsLoggedDirective } from './directives/is-logged.directive';
     MaterialModule
   ],
   exports: [
-    WhatRoleDirective
+    WhatRoleDirective,
+    IsLoggedDirective
   ]
 })
 export class SharedModule { }

@@ -1,0 +1,12 @@
+<p>
+<mat-toolbar color="primary">
+    <button mat-button routerLink="/welcome"><mat-icon>home</mat-icon></button>
+
+
+    <span class="example-spacer"></span>
+    <div>
+        <span>User:</span> {{ (authService.getUserLogged() | async)?.username | uppercase}}
+    </div>
+    <button mat-button (click)="logout()"><mat-icon>logout</mat-icon></button>
+</mat-toolbar>
+</p>
