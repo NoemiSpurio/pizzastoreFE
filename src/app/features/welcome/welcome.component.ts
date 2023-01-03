@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from 'src/app/core/auth/auth.service';
 
 @Component({
   selector: 'app-welcome',
@@ -11,4 +12,6 @@ export class WelcomeComponent {
   pizzaiolo: string = "ROLE_PIZZAIOLO";
   proprietario: string = "ROLE_PROPRIETARIO";
   fattorino: string = "ROLE_FATTORINO";
+
+  constructor(public authService: AuthService){}
 }
