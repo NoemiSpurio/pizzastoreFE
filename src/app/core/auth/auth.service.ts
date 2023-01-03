@@ -28,15 +28,10 @@ export class AuthService {
 
   setUserLogged(user: User | null) {
     this.userLoggedSubject$.next(user);
-    if(user) {
-    this.getUserRoles().subscribe({
-      next: res => user!.ruoli = res.roles,
-      complete: () => {
+    this.http.get<string[]>(this.apiServer + "/utente/rolesInfo", this.httpOptions).subscribe(rolesItem => 
+      { user!.roles = [...rolesItem];
         this.userLoggedSubject$.next(user);
-        this.router.navigateByUrl("welcome");
-      }
-    });
-  }
+      });
   }
 
   getUserLogged(): Observable<User | null> {
@@ -44,7 +39,7 @@ export class AuthService {
   }
 
   getUserRoles(): Observable<{roles: string[]}> {
-    return this.http.get<{roles: string[]}>(this.apiServer + "/utente/rolesInfo");
+    return this.http.get<{roles: string[]}>(this.apiServer + "/utente/rolesInfo", this.httpOptions);
   }
 
   isLoggedIn(): boolean {
@@ -53,6 +48,13 @@ export class AuthService {
 
   getUserToken(): string | null | undefined  {
     return this.userLoggedSubject$.value ? this.userLoggedSubject$.value.token : null;
+  }
+
+  hasRole(role: string): boolean {
+    if(this.userLoggedSubject$.value?.roles?.includes(role))
+      return true;
+    else
+      return false;
   }
 
   logout() {    

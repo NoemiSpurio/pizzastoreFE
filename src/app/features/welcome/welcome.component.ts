@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class WelcomeComponent {
 
+  admin: string = "ROLE_ADMIN";
+  pizzaiolo: string = "ROLE_PIZZAIOLO";
+  proprietario: string = "ROLE_PROPRIETARIO";
+  fattorino: string = "ROLE_FATTORINO";
 }

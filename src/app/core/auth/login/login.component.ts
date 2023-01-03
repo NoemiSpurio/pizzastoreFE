@@ -9,7 +9,7 @@ import { AuthService } from '../auth.service';
 export interface LoginForm extends FormGroup<{
   username: FormControl<string>;
   password: FormControl<string>;
-}>{}
+}> { }
 
 @Component({
   selector: 'app-login',
@@ -36,10 +36,11 @@ export class LoginComponent {
   }
 
   login(): void {
-      this.authService.login(this.userForm.getRawValue()).pipe(
-        takeUntil(this.destroy$)
-        ).subscribe(res => {
-          this.authService.setUserLogged(res);
-      });
-    }
+    this.authService.login(this.userForm.getRawValue()).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(res => {
+      this.authService.setUserLogged(res);
+      this.router.navigateByUrl("welcome");
+    });
+  }
 }

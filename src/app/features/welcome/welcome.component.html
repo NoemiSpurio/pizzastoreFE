@@ -2,7 +2,7 @@
 
   <main class="flex-shrink-0">
 
-    <div class="container">
+    <div class="container" [whatRole]="admin">
       <mat-card class="main-card" style="padding: 100px;">
         <mat-card-header>
           <mat-card-title style="color:darkgray;">Benvenuto su Pizza Store!</mat-card-title>
@@ -20,15 +20,15 @@
       </mat-card>
     </div>
 
-    <div class="container">
+    <div class="container" [whatRole]="pizzaiolo">
       <mat-card-content> Se loggo come pizzaiolo</mat-card-content>
     </div>
 
-    <div class="container">
+    <div class="container" [whatRole]="proprietario">
       <mat-card-content> Se loggo come proprietario</mat-card-content>
     </div>
 
-    <div class="container">
+    <div class="container" [whatRole]="fattorino">
       <mat-card-content> Se loggo come fattorino</mat-card-content>
     </div>
   </main>
