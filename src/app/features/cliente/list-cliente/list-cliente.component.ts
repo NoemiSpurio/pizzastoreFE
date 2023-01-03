@@ -36,7 +36,7 @@ export class ListClienteComponent {
   }
 
   showDetail(id: number) {
-    this.router.navigate(["cliente/detail/", id], { queryParams: { operation: "readOnly" } });
+    this.router.navigate(["cliente/detail/", id]);
   }
 
   openDialog(idCliente: number): void {
@@ -52,11 +52,11 @@ export class ListClienteComponent {
   }
 
   addNew() {
-    this.router.navigate(["cliente/create"], { queryParams: { operation: "add" } });
+    this.router.navigate(["cliente/create"]);
   }
 
   update(id: number) {
-    this.router.navigate(["cliente/edit/", id], { queryParams: { operation: "edit" } });
+    this.router.navigate(["cliente/edit/", id]);
   }
 
   search() {
