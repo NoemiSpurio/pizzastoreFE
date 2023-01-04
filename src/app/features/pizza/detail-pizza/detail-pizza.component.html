@@ -1,1 +1,52 @@
-<p>detail-pizza works!</p>
+<mat-card style='display: flex; align-items: center; flex-direction: row; padding: 20px;'>
+
+    <mat-card-content>
+        <form [formGroup]="pizzaReactive" class="example-form" (ngSubmit)="save()">
+            <p>
+                <mat-form-field class="form-element">
+                    <mat-label>Descrizione</mat-label>
+                    <input matInput name="descrizione" type="text" formControlName="descrizione"
+                        placeholder="inserisci descrizione...">
+                    <mat-error *ngIf="pizzaReactive.get('descrizione')?.hasError('required')">Descrizione
+                        obbligatoria</mat-error>
+                    <mat-error *ngIf="pizzaReactive.get('descrizione')?.hasError('minlength')">La Descrizione deve avere
+                        almeno 4 caratteri</mat-error>
+                </mat-form-field>
+            </p>
+
+            <p>
+                <mat-form-field class="form-element">
+                    <mat-label>Ingredienti</mat-label>
+                    <input matInput name="ingredienti" type="text" formControlName="ingredienti"
+                        placeholder="inserisci ingredienti...">
+                    <mat-error *ngIf="pizzaReactive.get('ingredienti')?.hasError('required')">Ingredienti
+                        obbligatori</mat-error>
+                    <mat-error *ngIf="pizzaReactive.get('ingredienti')?.hasError('minlength')">Il campo Ingredienti deve
+                        avere almeno 4 caratteri</mat-error>
+                </mat-form-field>
+            </p>
+
+            <mat-form-field class="form-element">
+                <mat-label>Prezzo</mat-label>
+                <input matInput name="prezzoBase" type="number" formControlName="prezzoBase"
+                    placeholder="inserisci prezzo base...">
+                <mat-error *ngIf="pizzaReactive.get('prezzoBase')?.hasError('required')">Prezzo Base
+                    obbligatorio</mat-error>
+            </mat-form-field>
+
+            <section class="form-element" *ngIf="disable()">
+                <mat-checkbox formControlName="attivo">Attivo</mat-checkbox>
+            </section>
+
+            <div class="col-12">
+                <button mat-icon-button aria-label="Back" (click)="back()" color="primary">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <button type="submit" name="submit" value="submit" id="submit" color="primary" mat-icon-button
+                    *ngIf="disable()"><mat-icon>done</mat-icon></button>
+            </div>
+
+        </form>
+    </mat-card-content>
+
+</mat-card>

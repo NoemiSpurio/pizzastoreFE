@@ -29,12 +29,11 @@ export class PizzaService {
     return this.http.delete(this.apiServer + "/" + id);
   }
 
-  create(pizzaInput: Pizza) {
-    return this.http.post(this.apiServer, pizzaInput, this.httpOptions);
-  }
-
-  update(pizzaInput: Pizza) {
-    return this.http.put(this.apiServer + "/" + pizzaInput.id, pizzaInput, this.httpOptions);
+  save(pizzaInput: Pizza) {
+    if (!pizzaInput.id) {
+      return this.http.post(this.apiServer, pizzaInput, this.httpOptions);
+    }
+      return this.http.put(this.apiServer + "/" + pizzaInput.id, pizzaInput, this.httpOptions);
   }
 
   search(example: Pizza): Observable<Pizza[]> {
