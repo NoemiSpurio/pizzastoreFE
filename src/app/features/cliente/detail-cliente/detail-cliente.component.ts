@@ -29,7 +29,7 @@ export class DetailClienteComponent {
     nome: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(4)]),
     cognome: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(4)]),
     indirizzo: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]),
-    attivo: this.fb.nonNullable.control('', [Validators.required])
+    attivo: this.fb.nonNullable.control('')
   });
 
   ngOnInit(): void {
@@ -48,6 +48,8 @@ export class DetailClienteComponent {
   }
 
   save(){
+    if(!this.clienteReactive.value.attivo)
+    this.clienteReactive.value.attivo = false;
     if(this.clienteReactive.valid)
       this.clienteService.save(this.clienteReactive.value).subscribe(res => this.router.navigate(['cliente/list']));
   }
