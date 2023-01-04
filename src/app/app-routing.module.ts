@@ -22,6 +22,11 @@ const routes: Routes = [
     loadChildren: () => import('./features/pizza/pizza.module').then(m => m.PizzaModule),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'ordine',
+    loadChildren: () => import('./features/ordine/ordine.module').then(m => m.OrdineModule),
+    canActivate: [AuthGuard]
+  },
   { path: '', redirectTo: '/welcome', pathMatch: 'full' },
   { path: '**', redirectTo: '/welcome', pathMatch: 'full' }
 ];
