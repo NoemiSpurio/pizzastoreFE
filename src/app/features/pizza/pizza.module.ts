@@ -15,6 +15,11 @@ const routes: Routes = [
   },
 
   {
+    path: 'listFromSearch',
+    component: ListPizzaComponent
+  },
+
+  {
     path: 'detail/:id',
     component: DetailPizzaComponent
   },
@@ -31,7 +36,7 @@ const routes: Routes = [
 
   {
     path: 'search',
-    component: ListPizzaComponent
+    component: DetailPizzaComponent
   },
 
   {

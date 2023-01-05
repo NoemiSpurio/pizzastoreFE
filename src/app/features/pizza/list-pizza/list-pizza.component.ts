@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Pizza } from 'src/app/model/pizza';
+import { DataSearchServiceService } from 'src/app/shared/services/data-search-service.service';
 import { DialogDeletePizzaComponent } from '../dialog-delete-pizza/dialog-delete-pizza.component';
 import { PizzaService } from '../pizza.service';
 
@@ -14,7 +15,8 @@ import { PizzaService } from '../pizza.service';
 })
 export class ListPizzaComponent {
 
-  constructor(private pizzaService: PizzaService, private router: Router, public dialog: MatDialog, private route: ActivatedRoute) {}
+  constructor(private pizzaService: PizzaService, private router: Router, public dialog: MatDialog, private route: ActivatedRoute,
+    private dataSearchService: DataSearchServiceService) { }
   dataSource: MatTableDataSource<Pizza> = new MatTableDataSource<Pizza>();
   displayedColumns: string[] = ['id', 'descrizione', 'ingredienti', 'prezzoBase', 'attivo', 'azioni'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -39,11 +41,15 @@ export class ListPizzaComponent {
 
 
   getData() {
-    this.pizzaService.getAllPizze().subscribe(res => {
-      this.dataSource.data = res;
-    });
+    if (!this.router.url.includes('Search')) {
+      this.pizzaService.getAllPizze().subscribe(res => {
+        this.dataSource.data = res;
+      });
+    } else {
+      this.dataSource.data = this.dataSearchService.getData();
+    }
   }
-  
+
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
@@ -61,6 +67,17 @@ export class ListPizzaComponent {
   }
 
   search() {
-    // todo
+    this.router.navigate(["pizza/search"]);
+  }
+
+  list() {
+    this.router.navigate(["pizza/list"]);
+  }
+
+  show(): boolean{
+    if(this.router.url.includes('Search'))
+      return false;
+    else
+      return true;
   }
 }

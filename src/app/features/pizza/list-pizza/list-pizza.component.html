@@ -1,6 +1,7 @@
 <div style="padding: 20px;">
     <button mat-icon-button (click)="addNew()"><mat-icon color="accent">add</mat-icon></button>
-    <button mat-icon-button (click)="search()"><mat-icon color="accent">filter_alt</mat-icon></button>
+    <button mat-icon-button (click)="search()" *ngIf="show()"><mat-icon color="accent">filter_alt</mat-icon></button>
+    <button mat-icon-button (click)="list()" *ngIf="!show()"><mat-icon color="accent">filter_alt_off</mat-icon></button>
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
         <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef> Id: </th>
