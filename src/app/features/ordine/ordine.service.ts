@@ -32,20 +32,19 @@ export class OrdineService {
     return this.http.delete<boolean>(this.apiServer + "/ordine/" + id);
   }
 
-  create(ordineInput: Ordine): Observable<Ordine> {
-    return this.http.post<Ordine>(this.apiServer + "/ordine", ordineInput, this.httpOptions);
-  }
-
-  update(ordineInput: Ordine): Observable<Ordine> {
-    return this.http.put<Ordine>(this.apiServer + "/ordine/" + ordineInput.id, ordineInput, this.httpOptions);
+  save(ordineInput: Ordine) {
+    if (!ordineInput.id) {
+      return this.http.post(this.apiServer + "/ordine", ordineInput, this.httpOptions);
+    }
+      return this.http.put(this.apiServer + "/ordine/" + ordineInput.id, ordineInput, this.httpOptions);
   }
 
   search(example: Ordine): Observable<Ordine[]> {
     return this.http.post<Ordine[]>(this.apiServer + "/ordine/search", example, this.httpOptions);
   }
 
-  getAllFattorini() {
-    // todo
+  getAllFattorini() : Observable<User[]> {
+    return this.http.get<User[]>(this.apiServer + "/utente/fattorini");
   }
 
   getRicaviTotali(dateInput: Stats): Observable<number> {

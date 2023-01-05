@@ -43,7 +43,7 @@
                     <mat-icon>arrow_back</mat-icon>
                 </button>
                 <button type="submit" name="submit" value="submit" id="submit" color="primary" mat-icon-button
-                    *ngIf="disable()"><mat-icon>done</mat-icon></button>
+                    *ngIf="disable()" [disabled]="pizzaReactive.invalid"><mat-icon>done</mat-icon></button>
             </div>
 
         </form>

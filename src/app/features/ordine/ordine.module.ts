@@ -7,6 +7,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/shared/material/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { StatsComponent } from './stats/stats.component';
 
 const routes: Routes = [
   {
@@ -30,8 +31,12 @@ const routes: Routes = [
     component: DetailOrdineComponent
   },
   {
+    path: 'dateStats',
+    component: StatsComponent
+  },
+  {
     path: 'stats',
-    component: DetailOrdineComponent //FIXARE
+    component: StatsComponent
   },
   {
     path: '',
@@ -44,7 +49,8 @@ const routes: Routes = [
   declarations: [
     ListOrdineComponent,
     DetailOrdineComponent,
-    DialogDeleteOrdineComponent
+    DialogDeleteOrdineComponent,
+    StatsComponent
   ],
   imports: [
     CommonModule,

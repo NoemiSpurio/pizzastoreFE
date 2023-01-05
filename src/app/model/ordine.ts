@@ -1,4 +1,5 @@
 import { Cliente } from "./cliente"
+import { Pizza } from "./pizza"
 import { User } from "./user"
 
 export interface Ordine {
@@ -9,5 +10,5 @@ export interface Ordine {
     closed?: boolean
     cliente?: Cliente
     fattorino?: User
-    pizzaIds?: number[]
+    pizze?: Pizza[]
 }
