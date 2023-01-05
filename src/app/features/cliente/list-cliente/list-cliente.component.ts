@@ -68,4 +68,15 @@ export class ListClienteComponent {
   search() {
     this.router.navigate(["cliente/search"]);
   }
+
+  list() {
+    this.router.navigate(["cliente/list"]);
+  }
+
+  show(): boolean{
+    if(this.router.url.includes('Search'))
+      return false;
+    else
+      return true;
+  }
 }
