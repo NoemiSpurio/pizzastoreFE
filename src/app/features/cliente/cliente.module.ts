@@ -14,6 +14,10 @@ const routes: Routes = [
     component: ListClienteComponent
   },
   {
+    path: 'listFromSearch',
+    component: ListClienteComponent
+  },
+  {
     path: 'detail/:id',
     component: DetailClienteComponent
   },
