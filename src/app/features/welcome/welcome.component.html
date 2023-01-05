@@ -3,74 +3,19 @@
   <main class="flex-shrink-0">
 
     <p>
-    <div class="container" [whatRole]="admin" style="margin: 10px;">
+    <div class="container" style="margin: 10px;">
       <mat-card class="main-card" style="padding: 100px;">
         <mat-card-header>
           <mat-card-title style="color:darkgray;">Benvenuto {{ (authService.getUserLogged() | async)?.username}}!</mat-card-title>
         </mat-card-header>
-        <mat-card-content style='display: flex; align-items: center; flex-direction: row; padding: 20px;'
-          class="row g-3">
-          <p>
-            Grazie al ruolo di admin hai accesso alla gestione dei clienti della pizzeria.
-          </p>
-        </mat-card-content>
         <mat-card-actions>
-          <button mat-raised-button color="primary" routerLink="/cliente/list">Lista clienti</button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-
-    <div class="container" [whatRole]="pizzaiolo" style="margin: 10px;">
-      <mat-card class="main-card" style="padding: 100px;">
-        <mat-card-header>
-          <mat-card-title style="color:darkgray;">Benvenuto {{ (authService.getUserLogged() | async)?.username}}!</mat-card-title>
-        </mat-card-header>
-        <mat-card-content style='display: flex; align-items: center; flex-direction: row; padding: 20px;'
-          class="row g-3">
-          <p>
-            Grazie al ruolo di pizzaiolo hai accesso alla gestione delle pizze presenti nel menu e alla gestione degli ordini.
-            Puoi inoltre creare un nuovo ordine.
-          </p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary" routerLink="/pizza/list" style="margin: 10px;">Lista pizze</button>
-          <button mat-raised-button color="primary" routerLink="/ordine/list" style="margin: 10px;">Lista ordini</button>
-          <button mat-raised-button color="primary" routerLink="/ordine/create" style="margin: 10px;">Crea ordine</button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-
-    <div class="container" [whatRole]="proprietario" style="margin: 10px;">
-      <mat-card class="main-card" style="padding: 100px;">
-        <mat-card-header>
-          <mat-card-title style="color:darkgray;">Benvenuto {{ (authService.getUserLogged() | async)?.username}}!</mat-card-title>
-        </mat-card-header>
-        <mat-card-content style='display: flex; align-items: center; flex-direction: row; padding: 20px;'
-          class="row g-3">
-          <p>
-            Grazie al ruolo di proprietario hai accesso al report di ordini e alle statistiche.
-          </p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary" routerLink="/ordine/list" style="margin: 10px;">Lista ordini</button>
-          <button mat-raised-button color="primary" routerLink="/ordine/dateStats" style="margin: 10px;">Statistiche</button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-
-    <div class="container" [whatRole]="fattorino" style="margin: 10px;">
-      <mat-card class="main-card" style="padding: 100px;">
-        <mat-card-header>
-          <mat-card-title style="color:darkgray;">Benvenuto {{ (authService.getUserLogged() | async)?.username}}!</mat-card-title>
-        </mat-card-header>
-        <mat-card-content style='display: flex; align-items: center; flex-direction: row; padding: 20px;'
-          class="row g-3">
-          <p>
-            Grazie al ruolo di fattorino hai accesso all'elenco di ordini aperti.
-          </p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary" routerLink="/ordine/list">Lista ordini</button>
+          <button mat-raised-button color="primary" [whatRole]="admin" routerLink="/cliente/list">Lista clienti</button>
+          <button mat-raised-button color="primary" [whatRole]="pizzaiolo" routerLink="/pizza/list" style="margin: 10px;">Lista pizze</button>
+          <button mat-raised-button color="primary" [whatRole]="pizzaiolo" routerLink="/ordine/list" style="margin: 10px;">Lista ordini</button>
+          <button mat-raised-button color="primary" [whatRole]="pizzaiolo" routerLink="/ordine/create" style="margin: 10px;">Crea ordine</button>
+          <button mat-raised-button color="primary" [whatRole]="proprietario" routerLink="/ordine/list" style="margin: 10px;">Report ordini</button>
+          <button mat-raised-button color="primary" [whatRole]="proprietario" routerLink="/ordine/dateStats" style="margin: 10px;">Statistiche</button>
+          <button mat-raised-button color="primary" [whatRole]="fattorino" routerLink="/ordine/list">Ordini da consegnare</button>
         </mat-card-actions>
       </mat-card>
     </div>
