@@ -40,7 +40,7 @@
             <p>
                 <mat-form-field class="form-element">
                     <mat-label *ngIf="isCreate()">Cliente</mat-label>
-                    <mat-label *ngIf="!isCreate()">{{ordineReactive.value.cliente.nome}} {{ordineReactive.value.cliente.cognome}}</mat-label>
+                    <mat-label *ngIf="!isCreate()">{{ordineReactive.value.cliente?.nome}} {{ordineReactive.value.cliente?.cognome}}</mat-label>
                     <mat-select formControlName="cliente">
                         <mat-option value="">Seleziona</mat-option>
                         <mat-option *ngFor="let clienteItem of clienti" [value]="clienteItem">
@@ -55,7 +55,7 @@
             <p>
                 <mat-form-field class="form-element">
                     <mat-label *ngIf="isCreate()">Fattorino</mat-label>
-                    <mat-label *ngIf="!isCreate()">{{ordineReactive.value.fattorino.nome}} {{ordineReactive.value.fattorino.cognome}}</mat-label>
+                    <mat-label *ngIf="!isCreate()">{{ordineReactive.value.fattorino?.nome}} {{ordineReactive.value.fattorino?.cognome}}</mat-label>
                     <mat-select formControlName="fattorino">
                         <mat-option value="">Seleziona</mat-option>
                         <mat-option *ngFor="let fattorinoItem of fattorini" [value]="fattorinoItem">
@@ -68,12 +68,12 @@
             </p>
 
             <div>
+                <section class="form-element" *ngFor="let pizzaItem of pizze">
+                    <mat-checkbox [value]="pizzaItem | json" name="pizze" formArrayName="pizze"
+                    [checked]="pizzaItem.checked" [disabled]="isDetail()">{{pizzaItem.descrizione}}</mat-checkbox>
+                </section>
                 <mat-error *ngIf="ordineReactive.get('pizze')?.hasError('required')">Selezionare almeno una
                     pizza</mat-error>
-                <section class="form-element" *ngFor="let pizzaItem of pizze">
-                    <mat-checkbox [value]="pizzaItem | json" name="pizze"
-                        formArrayName="pizze">{{pizzaItem.descrizione}}</mat-checkbox>
-                </section>
             </div>
 
             <div class="col-12">

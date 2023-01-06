@@ -1,9 +1,10 @@
 import { Component, SimpleChanges } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cliente } from 'src/app/model/cliente';
 import { Ordine } from 'src/app/model/ordine';
 import { Pizza } from 'src/app/model/pizza';
+import { PizzaChecked } from 'src/app/model/pizza-checked';
 import { User } from 'src/app/model/user';
 import { ClienteService } from '../../cliente/cliente.service';
 import { PizzaService } from '../../pizza/pizza.service';
@@ -15,9 +16,9 @@ export interface OrdineForm extends FormGroup<{
   codice: FormControl<string>;
   costo: FormControl<any>;
   closed: FormControl<any>;
-  cliente: FormControl<any>;
-  fattorino: FormControl<any>;
-  pizze: FormControl<any>
+  cliente: FormControl<Cliente>;
+  fattorino: FormControl<User>;
+  pizze: FormControl<Pizza[]>
 }> { }
 
 @Component({
@@ -34,17 +35,17 @@ export class DetailOrdineComponent {
   ordine: Ordine = {};
   clienti: Cliente[] = [];
   fattorini: User[] = [];
-  pizze: Pizza[] = [];
+  pizze: PizzaChecked[] = [];
 
-  ordineReactive: FormGroup = this.fb.group({
+  ordineReactive: OrdineForm = this.fb.group({
     id: this.fb.control(null),
     data: this.fb.nonNullable.control('', [Validators.required]),
     codice: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(4)]),
     costo: this.fb.nonNullable.control(''),
     closed: this.fb.nonNullable.control(''),
-    cliente: this.fb.nonNullable.control('', [Validators.required]),
-    fattorino: this.fb.nonNullable.control('', [Validators.required]),
-    pizze: this.fb.nonNullable.array([], [Validators.required])
+    cliente: this.fb.nonNullable.control({}, [Validators.required]),
+    fattorino: this.fb.nonNullable.control({}, [Validators.required]),
+    pizze: this.fb.nonNullable.control([{}], [Validators.required])
   });
 
   ngOnInit(): void {
@@ -53,9 +54,12 @@ export class DetailOrdineComponent {
       this.idOrdine = parseInt(id!);
       this.ordineService.findById(this.idOrdine).subscribe(o => {
         this.ordineReactive.patchValue(o);
+        this.ordineReactive.value.pizze?.forEach(p => {
+          console.log(p.descrizione);
+        })
       }); 
     }
-    if (this.router.url.includes('detail')) {
+    if (this.isDetail()) {
       this.ordineReactive.disable();
     } else {
       this.clienteService.getAllClienti().subscribe(res => {
@@ -68,6 +72,9 @@ export class DetailOrdineComponent {
     }
     this.pizzaService.getAllPizze().subscribe(res => {
       this.pizze = res;
+      this.pizze.forEach(p => {
+        p.checked = this.isPizzaChecked(p.descrizione!);
+      })
     });
   }
 
@@ -99,5 +106,16 @@ export class DetailOrdineComponent {
 
   isEdit(): boolean {
     return this.router.url.includes('edit');
+  }
+
+  isPizzaChecked(pizzaDescription: string): boolean {
+    let output: boolean = false;
+    if (!this.isCreate()) {
+      this.ordineReactive.value.pizze?.forEach(p => {
+        if (pizzaDescription === p.descrizione)
+          output = true;
+      });
+    }
+    return output;
   }
 }
