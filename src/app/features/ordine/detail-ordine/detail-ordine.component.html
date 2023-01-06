@@ -26,7 +26,7 @@
             </p>
 
             <p>
-                <mat-form-field class="form-element" *ngIf="!disable()">
+                <mat-form-field class="form-element" *ngIf="isDetail()">
                     <mat-label>Costo totale</mat-label>
                     <input matInput name="costo" type="number" formControlName="costo"
                         placeholder="inserisci costo totale...">
@@ -39,7 +39,8 @@
 
             <p>
                 <mat-form-field class="form-element">
-                    <mat-label>Cliente</mat-label>
+                    <mat-label *ngIf="isCreate()">Cliente</mat-label>
+                    <mat-label *ngIf="!isCreate()">{{ordineReactive.value.cliente.nome}} {{ordineReactive.value.cliente.cognome}}</mat-label>
                     <mat-select formControlName="cliente">
                         <mat-option value="">Seleziona</mat-option>
                         <mat-option *ngFor="let clienteItem of clienti" [value]="clienteItem">
@@ -53,7 +54,8 @@
 
             <p>
                 <mat-form-field class="form-element">
-                    <mat-label>Fattorino</mat-label>
+                    <mat-label *ngIf="isCreate()">Fattorino</mat-label>
+                    <mat-label *ngIf="!isCreate()">{{ordineReactive.value.fattorino.nome}} {{ordineReactive.value.fattorino.cognome}}</mat-label>
                     <mat-select formControlName="fattorino">
                         <mat-option value="">Seleziona</mat-option>
                         <mat-option *ngFor="let fattorinoItem of fattorini" [value]="fattorinoItem">
@@ -79,7 +81,7 @@
                     <mat-icon>arrow_back</mat-icon>
                 </button>
                 <button type="submit" name="submit" value="submit" id="submit" color="primary" mat-icon-button
-                    *ngIf="disable()" [disabled]="ordineReactive.invalid"><mat-icon>done</mat-icon></button>
+                    *ngIf="!isDetail()" [disabled]="ordineReactive.invalid"><mat-icon>done</mat-icon></button>
             </div>
 
         </form>

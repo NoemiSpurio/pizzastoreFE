@@ -27,8 +27,8 @@ export interface OrdineForm extends FormGroup<{
 })
 export class DetailOrdineComponent {
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute, private ordineService: OrdineService, 
-    private router: Router, private clienteService: ClienteService, private pizzaService: PizzaService){}
+  constructor(private fb: FormBuilder, private route: ActivatedRoute, private ordineService: OrdineService,
+    private router: Router, private clienteService: ClienteService, private pizzaService: PizzaService) { }
 
   idOrdine?: number = 0;
   ordine: Ordine = {};
@@ -48,48 +48,56 @@ export class DetailOrdineComponent {
   });
 
   ngOnInit(): void {
-    if(this.route.snapshot.paramMap.get('id') != null){
+    if (this.route.snapshot.paramMap.get('id') != null) {
       let id = this.route.snapshot.paramMap.get('id');
       this.idOrdine = parseInt(id!);
-      this.ordineService.findById(this.idOrdine).subscribe(u => {
-        this.ordineReactive.patchValue(u);
-      });
-      if(this.router.url.includes('detail'))
-        this.ordineReactive.disable();
+      this.ordineService.findById(this.idOrdine).subscribe(o => {
+        this.ordineReactive.patchValue(o);
+      }); 
     }
-    this.clienteService.getAllClienti().subscribe(res => {
-      this.clienti = res;
-    });
+    if (this.router.url.includes('detail')) {
+      this.ordineReactive.disable();
+    } else {
+      this.clienteService.getAllClienti().subscribe(res => {
+        this.clienti = res;
+      });
 
-    this.ordineService.getAllFattorini().subscribe(res => {
-      this.fattorini = res;
-    });
-
+      this.ordineService.getAllFattorini().subscribe(res => {
+        this.fattorini = res;
+      });
+    }
     this.pizzaService.getAllPizze().subscribe(res => {
       this.pizze = res;
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void{
-    if(this.idOrdine)
-      this.ordineService.findById(this.idOrdine).subscribe(u => this.ordine = u);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.idOrdine)
+      this.ordineService.findById(this.idOrdine).subscribe(u => {
+        this.ordine = u;
+      });
   }
 
-  save(){
-    if(!this.ordineReactive.value.closed)
+  save() {
+    if (!this.ordineReactive.value.closed)
       this.ordineReactive.value.closed = false;
-    if(this.ordineReactive.valid)
+    if (this.ordineReactive.valid)
       this.ordineService.save(this.ordineReactive.value).subscribe(res => this.router.navigate(['ordine/list']));
   }
 
-  back(){
+  back() {
     this.router.navigate(['ordine/list']);
   }
 
-  disable(): boolean {
-    if(this.router.url.includes('detail'))
-      return false;
-    else
-      return true;
+  isCreate(): boolean {
+    return this.router.url.includes('create');
+  }
+
+  isDetail(): boolean {
+    return this.router.url.includes('detail');
+  }
+
+  isEdit(): boolean {
+    return this.router.url.includes('edit');
   }
 }

@@ -4,7 +4,7 @@ import { User } from "./user"
 
 export interface Ordine {
     id?: number
-    data?: any
+    data?: Date
     codice?: string
     costoTotale?: number
     closed?: boolean
