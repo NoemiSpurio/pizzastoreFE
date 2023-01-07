@@ -67,7 +67,7 @@
             <div>
                 <section class="form-element" *ngFor="let pizzaItem of pizze">
                     <mat-checkbox [value]="pizzaItem | json" name="pizze" formArrayName="pizze"
-                    [checked]="pizzaItem.checked" [disabled]="isDetail()"
+                    [checked]="pizzaItem.checked" [disabled]="isDetail() || !pizzaItem.attivo"
                     (change)="checkPizza(pizzaItem)">{{pizzaItem.descrizione}}</mat-checkbox>
                 </section>
                 <mat-error *ngIf="ordineReactive.get('pizze')?.hasError('required')">Selezionare almeno una

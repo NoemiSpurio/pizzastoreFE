@@ -71,7 +71,9 @@ export class DetailOrdineComponent {
       this.ordineReactive.disable();
     } else {
       this.clienteService.getAllClienti().subscribe(res => {
-        this.clienti = res;
+        res.forEach(c => {
+          if(c.attivo) this.clienti.push(c);
+        });
       });
 
       this.ordineService.getAllFattorini().subscribe(res => {
