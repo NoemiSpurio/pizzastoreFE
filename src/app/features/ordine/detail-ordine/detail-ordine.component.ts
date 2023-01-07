@@ -1,5 +1,7 @@
-import { Component, SimpleChanges } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { Component, LOCALE_ID, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { FloatLabelType } from '@angular/material/form-field';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cliente } from 'src/app/model/cliente';
 import { Ordine } from 'src/app/model/ordine';
@@ -24,18 +26,24 @@ export interface OrdineForm extends FormGroup<{
 @Component({
   selector: 'app-detail-ordine',
   templateUrl: './detail-ordine.component.html',
-  styleUrls: ['./detail-ordine.component.css']
+  styleUrls: ['./detail-ordine.component.css'],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'it-IT'}
+  ]
 })
 export class DetailOrdineComponent {
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, private ordineService: OrdineService,
-    private router: Router, private clienteService: ClienteService, private pizzaService: PizzaService) { }
+    private router: Router, private clienteService: ClienteService, private pizzaService: PizzaService,
+    private dateAdapter: DateAdapter<any>) { }
 
   idOrdine?: number = 0;
   ordine: Ordine = {};
   clienti: Cliente[] = [];
   fattorini: User[] = [];
   pizze: PizzaChecked[] = [];
+  nomeCliente: string = '';
+  nomeFattorino: string = '';
 
   ordineReactive: OrdineForm = this.fb.group({
     id: this.fb.control(null),
@@ -49,14 +57,14 @@ export class DetailOrdineComponent {
   });
 
   ngOnInit(): void {
+    this.dateAdapter.setLocale('it-IT');
     if (this.route.snapshot.paramMap.get('id') != null) {
       let id = this.route.snapshot.paramMap.get('id');
       this.idOrdine = parseInt(id!);
       this.ordineService.findById(this.idOrdine).subscribe(o => {
         this.ordineReactive.patchValue(o);
-        this.ordineReactive.value.pizze?.forEach(p => {
-          console.log(p.descrizione);
-        })
+        this.nomeCliente = this.ordineReactive.value.cliente?.nome + ' ' + this.ordineReactive.value.cliente?.cognome;
+        this.nomeFattorino = this.ordineReactive.value.fattorino?.nome + ' ' + this.ordineReactive.value.fattorino?.cognome;
       }); 
     }
     if (this.isDetail()) {
@@ -88,8 +96,19 @@ export class DetailOrdineComponent {
   save() {
     if (!this.ordineReactive.value.closed)
       this.ordineReactive.value.closed = false;
+    // per rimuovere quella messa di default
+    let pizzeNellOrdine: Pizza[] = [];
+    this.pizze.forEach(pizza => {
+      if (pizza.checked)
+        pizzeNellOrdine.push(pizza);
+    })
+    if (pizzeNellOrdine.length > 0)
+      this.ordineReactive.value.pizze! = pizzeNellOrdine;
+
+    this.ordineReactive.value.data = this.getIsoDateWithoutTime(new Date(Date.parse(this.ordineReactive.value.data!)));
+
     if (this.ordineReactive.valid)
-      this.ordineService.save(this.ordineReactive.value).subscribe(res => this.router.navigate(['ordine/list']));
+      this.ordineService.save(this.ordineReactive.value).subscribe(() => this.router.navigate(['ordine/list']));
   }
 
   back() {
@@ -117,5 +136,19 @@ export class DetailOrdineComponent {
       });
     }
     return output;
+  }
+
+  checkPizza(pizza: PizzaChecked): void {
+    pizza.checked = !pizza.checked;
+  }
+
+  // per ottenere la data in formato yyyy-MM-dd
+  getIsoDateWithoutTime(date: Date): string {
+    return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + 
+      '-' + ('0' + date.getDate()).slice(-2);
+  }
+
+  isLabelFloating(): FloatLabelType {
+    return this.isCreate() ? 'auto' : 'always'; 
   }
 }

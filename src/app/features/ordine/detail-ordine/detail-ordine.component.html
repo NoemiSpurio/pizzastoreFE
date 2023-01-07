@@ -5,11 +5,11 @@
             <p>
                 <mat-form-field class="form-element">
                     <mat-label>Inserisci la data</mat-label>
-                    <input matInput [matDatepicker]="picker" name="data" formControlName="data"
-                        placeholder="dd/MM/yyyy">
+                    <input matInput [matDatepicker]="picker" name="data" formControlName="data">
                     <mat-error *ngIf="ordineReactive.get('data')?.hasError('required')">Data obbligatoria</mat-error>
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
+                    <mat-hint>DD/MM/YYYY</mat-hint>
                 </mat-form-field>
             </p>
 
@@ -28,8 +28,7 @@
             <p>
                 <mat-form-field class="form-element" *ngIf="isDetail()">
                     <mat-label>Costo totale</mat-label>
-                    <input matInput name="costo" type="number" formControlName="costo"
-                        placeholder="inserisci costo totale...">
+                    <input matInput name="costo" type="number" formControlName="costo">
                 </mat-form-field>
             </p>
 
@@ -38,10 +37,9 @@
             </section>
 
             <p>
-                <mat-form-field class="form-element">
-                    <mat-label *ngIf="isCreate()">Cliente</mat-label>
-                    <mat-label *ngIf="!isCreate()">{{ordineReactive.value.cliente?.nome}} {{ordineReactive.value.cliente?.cognome}}</mat-label>
-                    <mat-select formControlName="cliente">
+                <mat-form-field class="form-element" [floatLabel]="isLabelFloating()">
+                    <mat-label>Cliente</mat-label>
+                    <mat-select formControlName="cliente" [placeholder]="nomeCliente">
                         <mat-option value="">Seleziona</mat-option>
                         <mat-option *ngFor="let clienteItem of clienti" [value]="clienteItem">
                             {{clienteItem.nome}} {{clienteItem.cognome}}
@@ -53,10 +51,9 @@
             </p>
 
             <p>
-                <mat-form-field class="form-element">
-                    <mat-label *ngIf="isCreate()">Fattorino</mat-label>
-                    <mat-label *ngIf="!isCreate()">{{ordineReactive.value.fattorino?.nome}} {{ordineReactive.value.fattorino?.cognome}}</mat-label>
-                    <mat-select formControlName="fattorino">
+                <mat-form-field class="form-element" [floatLabel]="isLabelFloating()">
+                    <mat-label>Fattorino</mat-label>
+                    <mat-select formControlName="fattorino" [placeholder]="nomeFattorino">
                         <mat-option value="">Seleziona</mat-option>
                         <mat-option *ngFor="let fattorinoItem of fattorini" [value]="fattorinoItem">
                             {{fattorinoItem.nome}} {{fattorinoItem.cognome}}
@@ -70,7 +67,8 @@
             <div>
                 <section class="form-element" *ngFor="let pizzaItem of pizze">
                     <mat-checkbox [value]="pizzaItem | json" name="pizze" formArrayName="pizze"
-                    [checked]="pizzaItem.checked" [disabled]="isDetail()">{{pizzaItem.descrizione}}</mat-checkbox>
+                    [checked]="pizzaItem.checked" [disabled]="isDetail()"
+                    (change)="checkPizza(pizzaItem)">{{pizzaItem.descrizione}}</mat-checkbox>
                 </section>
                 <mat-error *ngIf="ordineReactive.get('pizze')?.hasError('required')">Selezionare almeno una
                     pizza</mat-error>
