@@ -15,6 +15,10 @@ const routes: Routes = [
     component: ListOrdineComponent
   },
   {
+    path: 'consegne',
+    component: ListOrdineComponent
+  },
+  {
     path: 'listFromSearch',
     component: ListOrdineComponent
   },

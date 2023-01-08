@@ -36,14 +36,14 @@ export class OrdineService {
     if (!ordineInput.id) {
       return this.http.post(this.apiServer + "/ordine", ordineInput, this.httpOptions);
     }
-      return this.http.put(this.apiServer + "/ordine/" + ordineInput.id, ordineInput, this.httpOptions);
+    return this.http.put(this.apiServer + "/ordine/" + ordineInput.id, ordineInput, this.httpOptions);
   }
 
   search(example: Ordine): Observable<Ordine[]> {
     return this.http.post<Ordine[]>(this.apiServer + "/ordine/search", example, this.httpOptions);
   }
 
-  getAllFattorini() : Observable<User[]> {
+  getAllFattorini(): Observable<User[]> {
     return this.http.get<User[]>(this.apiServer + "/utente/fattorini");
   }
 
@@ -67,7 +67,7 @@ export class OrdineService {
     return this.http.post<Cliente[]>(this.apiServer + "/ordine/clientiVirtuosiTra", dateInput, this.httpOptions);
   }
 
-  getOrdiniPerFattorino() {
-    // todo
+  getOrdiniPerFattorino(): Observable<Ordine[]> {
+    return this.http.get<Ordine[]>(this.apiServer + "/ordine/fattorino");
   }
 }

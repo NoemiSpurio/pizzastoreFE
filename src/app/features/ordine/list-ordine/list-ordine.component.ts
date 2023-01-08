@@ -36,6 +36,10 @@ export class ListOrdineComponent {
       this.ordineService.getAllOrdini().subscribe(res => {
         this.dataSource.data = res;
       });
+    } else if(!this.router.url.includes('consegne')) {
+      this.ordineService.getOrdiniPerFattorino().subscribe(res => {
+        this.dataSource.data = res;
+      });
     } else {
       this.dataSource.data = this.dataSearchService.getData();
     }
