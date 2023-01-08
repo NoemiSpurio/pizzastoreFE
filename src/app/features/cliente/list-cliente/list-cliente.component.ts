@@ -24,17 +24,17 @@ export class ListClienteComponent {
   urlSearchOperationFlag: string | null = ""
 
   ngOnInit(): void {
-      this.getData();
+    this.getData();
   }
 
   getData() {
-    if(!this.router.url.includes('Search')){
-    this.clienteService.getAllClienti().subscribe(res => {
-      this.dataSource.data = res;
-    });
-  } else {
-    this.dataSource.data = this.dataSearchService.getData();
-  }
+    if (!this.router.url.includes('Search')) {
+      this.clienteService.getAllClienti().subscribe(res => {
+        this.dataSource.data = res;
+      });
+    } else {
+      this.dataSource.data = this.dataSearchService.getData();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -73,8 +73,8 @@ export class ListClienteComponent {
     this.router.navigate(["cliente/list"]);
   }
 
-  show(): boolean{
-    if(this.router.url.includes('Search'))
+  show(): boolean {
+    if (this.router.url.includes('Search'))
       return false;
     else
       return true;

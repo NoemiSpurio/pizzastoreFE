@@ -8,6 +8,7 @@ import { Ordine } from 'src/app/model/ordine';
 import { Pizza } from 'src/app/model/pizza';
 import { PizzaChecked } from 'src/app/model/pizza-checked';
 import { User } from 'src/app/model/user';
+import { DataSearchServiceService } from 'src/app/shared/services/data-search-service.service';
 import { ClienteService } from '../../cliente/cliente.service';
 import { PizzaService } from '../../pizza/pizza.service';
 import { OrdineService } from '../ordine.service';
@@ -28,14 +29,14 @@ export interface OrdineForm extends FormGroup<{
   templateUrl: './detail-ordine.component.html',
   styleUrls: ['./detail-ordine.component.css'],
   providers: [
-    { provide: LOCALE_ID, useValue: 'it-IT'}
+    { provide: LOCALE_ID, useValue: 'it-IT' }
   ]
 })
 export class DetailOrdineComponent {
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, private ordineService: OrdineService,
     private router: Router, private clienteService: ClienteService, private pizzaService: PizzaService,
-    private dateAdapter: DateAdapter<any>) { }
+    private dateAdapter: DateAdapter<any>, private dataSearchService: DataSearchServiceService) { }
 
   idOrdine?: number = 0;
   ordine: Ordine = {};
@@ -65,14 +66,14 @@ export class DetailOrdineComponent {
         this.ordineReactive.patchValue(o);
         this.nomeCliente = this.ordineReactive.value.cliente?.nome + ' ' + this.ordineReactive.value.cliente?.cognome;
         this.nomeFattorino = this.ordineReactive.value.fattorino?.nome + ' ' + this.ordineReactive.value.fattorino?.cognome;
-      }); 
+      });
     }
     if (this.isDetail()) {
       this.ordineReactive.disable();
     } else {
       this.clienteService.getAllClienti().subscribe(res => {
         res.forEach(c => {
-          if(c.attivo) this.clienti.push(c);
+          if (c.attivo) this.clienti.push(c);
         });
       });
 
@@ -86,6 +87,14 @@ export class DetailOrdineComponent {
         p.checked = this.isPizzaChecked(p.descrizione!);
       })
     });
+
+    if (this.router.url.includes('search')) {
+      this.ordineReactive.get('data')?.removeValidators([Validators.required]);
+      this.ordineReactive.get('codice')?.removeValidators([Validators.required, Validators.minLength(4)]);
+      this.ordineReactive.get('cliente')?.removeValidators([Validators.required]);
+      this.ordineReactive.get('fattorino')?.removeValidators([Validators.required]);
+      this.ordineReactive.get('pizze')?.removeValidators([Validators.required]);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -98,7 +107,6 @@ export class DetailOrdineComponent {
   save() {
     if (!this.ordineReactive.value.closed)
       this.ordineReactive.value.closed = false;
-    // per rimuovere quella messa di default
     let pizzeNellOrdine: Pizza[] = [];
     this.pizze.forEach(pizza => {
       if (pizza.checked)
@@ -107,10 +115,17 @@ export class DetailOrdineComponent {
     if (pizzeNellOrdine.length > 0)
       this.ordineReactive.value.pizze! = pizzeNellOrdine;
 
-    this.ordineReactive.value.data = this.getIsoDateWithoutTime(new Date(Date.parse(this.ordineReactive.value.data!)));
-
-    if (this.ordineReactive.valid)
-      this.ordineService.save(this.ordineReactive.value).subscribe(() => this.router.navigate(['ordine/list']));
+    if(this.ordineReactive.value.data)
+      this.ordineReactive.value.data = this.getIsoDateWithoutTime(new Date(Date.parse(this.ordineReactive.value.data!)));
+    if (!this.router.url.includes('search')) {
+      if (this.ordineReactive.valid)
+        this.ordineService.save(this.ordineReactive.value).subscribe(() => this.router.navigate(['ordine/list']));
+    } else {
+      this.ordineService.search(this.ordineReactive.value).subscribe({
+        next: ordineItem => this.dataSearchService.setData(ordineItem),
+        complete: () => this.router.navigate(['/ordine/listFromSearch'])
+      });
+    }
   }
 
   back() {
@@ -146,11 +161,11 @@ export class DetailOrdineComponent {
 
   // per ottenere la data in formato yyyy-MM-dd
   getIsoDateWithoutTime(date: Date): string {
-    return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + 
+    return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) +
       '-' + ('0' + date.getDate()).slice(-2);
   }
 
   isLabelFloating(): FloatLabelType {
-    return this.isCreate() ? 'auto' : 'always'; 
+    return this.isCreate() ? 'auto' : 'always';
   }
 }

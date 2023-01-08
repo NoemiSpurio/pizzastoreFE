@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Cliente } from 'src/app/model/cliente';
 import { Ordine } from 'src/app/model/ordine';
+import { DataSearchServiceService } from 'src/app/shared/services/data-search-service.service';
 import { DialogDeleteOrdineComponent } from '../dialog-delete-ordine/dialog-delete-ordine.component';
 import { OrdineService } from '../ordine.service';
 
@@ -15,7 +16,8 @@ import { OrdineService } from '../ordine.service';
 })
 export class ListOrdineComponent {
 
-  constructor(private ordineService: OrdineService, private router: Router, private route: ActivatedRoute, public dialog: MatDialog) { }
+  constructor(private ordineService: OrdineService, private router: Router, private route: ActivatedRoute, public dialog: MatDialog,
+              private dataSearchService: DataSearchServiceService) { }
 
   dataSource: MatTableDataSource<Ordine> = new MatTableDataSource<Ordine>();
   displayedColumns: string[] = ['id', 'data', 'codice', 'costo', 'closed', 'azioni'];
@@ -30,9 +32,13 @@ export class ListOrdineComponent {
   }
 
   getData() {
-    this.ordineService.getAllOrdini().subscribe(res => {
-      this.dataSource.data = res;
-    });
+    if (!this.router.url.includes('Search')) {
+      this.ordineService.getAllOrdini().subscribe(res => {
+        this.dataSource.data = res;
+      });
+    } else {
+      this.dataSource.data = this.dataSearchService.getData();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -64,6 +70,6 @@ export class ListOrdineComponent {
   }
 
   search() {
-    // todo
+    this.router.navigate(["ordine/search"]);
   }
 }
